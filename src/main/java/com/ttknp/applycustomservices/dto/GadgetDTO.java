@@ -4,10 +4,12 @@ import com.ttknp.applycustomservices.entity.Gadget;
 import com.ttknp.applycustomservices.service.ModelService;
 import com.ttknp.jdbccustomservice.jdbc.select.JdbcSelectHelper;
 import com.ttknp.jdbccustomservice.jdbc.update.JdbcInsertUpdateDeleteHelper;
+import com.ttknp.webcustomservice.exception.ContentNotAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
+
 
 @Service
 public class GadgetDTO implements ModelService<Gadget> {
@@ -23,12 +25,20 @@ public class GadgetDTO implements ModelService<Gadget> {
 
     @Override
     public List<Gadget> retrieveAllModels() {
-        return jdbcSelectHelper.selectAll(Gadget.class);
+        try {
+            return jdbcSelectHelper.selectAll(Gadget.class);
+        } catch (Exception e) {
+            throw new ContentNotAllowed(e);
+        }
     }
 
     @Override
     public <U> Gadget retrieveModel(U key) {
-        return jdbcSelectHelper.selectOne(Gadget.class,"gid",key);
+        try {
+            return jdbcSelectHelper.selectOne(Gadget.class,"gid",key);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ContentNotAllowed(e);
+        }
     }
 
     @Override
@@ -36,7 +46,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         try {
             return jdbcInsertUpdateDeleteHelper.insertOne(Gadget.class,model) > 0;
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new ContentNotAllowed(e);
         }
     }
 
@@ -45,7 +55,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         try {
             return jdbcInsertUpdateDeleteHelper.updateOne(Gadget.class,"gid",model) > 0;
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new ContentNotAllowed(e);
         }
     }
 
@@ -54,7 +64,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         try {
             return jdbcInsertUpdateDeleteHelper.deleteOne(Gadget.class,"gid",key) > 0;
         } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
+            throw new ContentNotAllowed(e);
         }
     }
 }

@@ -4,14 +4,16 @@ import com.ttknp.applycustomservices.entity.Gadget;
 import com.ttknp.applycustomservices.service.ModelService;
 import com.ttknp.responsecustomservice.constant.CommonStatus;
 import com.ttknp.responsecustomservice.entity.ResponseObject;
+import com.ttknp.webcustomservice.annotation.CommonRestAPI;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@RestController
-@RequestMapping(value = "/api/gadget")
+// @RestController
+// @RequestMapping(value = "/api/gadget")
+@CommonRestAPI(configPath = "/api/gadget",configOrigins = "http://localhost:4200")
 public class GadgetController {
 
     private final ModelService<Gadget> modelService;
