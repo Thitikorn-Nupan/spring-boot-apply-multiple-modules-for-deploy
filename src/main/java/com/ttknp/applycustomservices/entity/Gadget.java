@@ -1,6 +1,5 @@
 package com.ttknp.applycustomservices.entity;
 
-
 import org.springframework.data.relational.core.mapping.Table;
 
 @Table(name = "gadget")
