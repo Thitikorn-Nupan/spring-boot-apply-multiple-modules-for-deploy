@@ -3,7 +3,8 @@ package com.ttknp.applycustomservices.dto;
 import com.ttknp.applycustomservices.entity.Gadget;
 import com.ttknp.applycustomservices.service.ModelService;
 import com.ttknp.jdbccustomservice.jdbc.select.JdbcSelectHelper;
-import com.ttknp.jdbccustomservice.jdbc.sql_order_by.SqlOrderByHelper;
+import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlOrderByHelper;
+import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlWhereHelper;
 import com.ttknp.jdbccustomservice.jdbc.update.JdbcInsertUpdateDeleteHelper;
 import com.ttknp.webcustomservice.exception.ContentNotAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,11 @@ public class GadgetDTO implements ModelService<Gadget> {
     @Override
     public List<Gadget> retrieveOrderByAllModels(SqlOrderByHelper<Gadget> sqlOrderByHelper) {
         return jdbcSelectHelper.selectAll(Gadget.class, sqlOrderByHelper);
+    }
+
+    @Override
+    public List<Gadget> retrieveWhereAndOrderByAllModels(SqlWhereHelper<Gadget> sqlWhereHelper, SqlOrderByHelper<Gadget> sqlOrderByHelper,Gadget model) {
+        return jdbcSelectHelper.selectAll(Gadget.class , sqlOrderByHelper, sqlWhereHelper, model);
     }
 
     @Override

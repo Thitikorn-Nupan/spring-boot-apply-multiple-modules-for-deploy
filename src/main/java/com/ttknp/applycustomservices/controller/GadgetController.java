@@ -2,8 +2,9 @@ package com.ttknp.applycustomservices.controller;
 
 import com.ttknp.applycustomservices.entity.Gadget;
 import com.ttknp.applycustomservices.service.ModelService;
-import com.ttknp.jdbccustomservice.jdbc.sql_order_by.SqlOrderByHelper;
-import com.ttknp.jdbccustomservice.jdbc.sql_order_by.entity.RequestOrderBy;
+import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlOrderByHelper;
+import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlWhereHelper;
+import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.entity.RequestOrderBy;
 import com.ttknp.responsecustomservice.constant.CommonStatus;
 import com.ttknp.responsecustomservice.entity.ResponseObject;
 import com.ttknp.webcustomservice.annotation.CommonRestAPI;
@@ -39,8 +40,39 @@ public class GadgetController {
                 );
     }
 
+    @GetMapping(value = "/selectAllWhereAndOrderBy")
+    private ResponseEntity<ResponseObject<List<Gadget>>> getAllWhereAndOrderBy(@RequestBody(required = false) RequestOrderBy<Gadget> requestOrderBy) {
+        SqlWhereHelper<Gadget> sqlWhereHelper = null;
+        SqlOrderByHelper<Gadget> sqlOrderByHelper = null;
+        Gadget gadget = requestOrderBy.getWhereModel() != null ? requestOrderBy.getWhereModel() : null;
+        if (requestOrderBy != null) {
+            if (gadget != null) {
+                sqlWhereHelper = ((stringBuilder, alias, model) -> {
+                    String whereAsString = requestOrderBy.getWhereModelIsPkSubclass(alias); // Case class have primary key on subclass
+                    stringBuilder.append(whereAsString);
+                });
+            }
+
+            if (requestOrderBy.getOrderBy() != null && !requestOrderBy.getOrderBy().isEmpty()) {
+                sqlOrderByHelper = ((stringBuilder, alias, model) -> {
+                    String orderByAsString = requestOrderBy.getOrderBy(alias, requestOrderBy.getOrderBy());
+                    stringBuilder.append(orderByAsString);
+                });
+            }
+
+        }
+        return ResponseEntity
+                .status((Short) CommonStatus.OK[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.OK[0])
+                        .info((String)  CommonStatus.OK[1])
+                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper,sqlOrderByHelper,gadget))
+                        .build()
+                );
+    }
+
     @GetMapping(value = "/selectAllOrderBy")
-    private ResponseEntity<ResponseObject<List<Gadget>>> getAllCustomersOrderBy(@RequestBody(required = false) RequestOrderBy requestOrderBy) {
+    private ResponseEntity<ResponseObject<List<Gadget>>> getAllCustomersOrderBy(@RequestBody(required = false) RequestOrderBy<Gadget> requestOrderBy) {
         SqlOrderByHelper<Gadget> sqlOrderByHelper = null;
         if (requestOrderBy != null) {
             log.debug("orderBy (list) = {}", requestOrderBy.getOrderBy()); // [OrderBy{column='price', direction='asc'}, OrderBy{column='brand', direction='desc'}, OrderBy{column='gid', direction='asc'}]
