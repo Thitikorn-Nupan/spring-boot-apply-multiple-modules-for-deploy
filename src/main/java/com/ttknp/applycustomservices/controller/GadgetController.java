@@ -40,6 +40,37 @@ public class GadgetController {
                 );
     }
 
+    @GetMapping(value = "/selectAllWhereAndOrderByCustomAlias")
+    private ResponseEntity<ResponseObject<List<Gadget>>> getAllWhereAndOrderByCustomAlias(@RequestBody(required = false) RequestOrderBy<Gadget> requestOrderBy) {
+        SqlWhereHelper<Gadget> sqlWhereHelper = null;
+        SqlOrderByHelper<Gadget> sqlOrderByHelper = null;
+        Gadget gadget = requestOrderBy.getWhereModel() != null ? requestOrderBy.getWhereModel() : null;
+        if (requestOrderBy != null) {
+            if (gadget != null) {
+                sqlWhereHelper = ((stringBuilder, alias, model) -> {
+                    String whereAsString = requestOrderBy.getWhereModelIsPkSubclass(alias); // Case class have primary key on subclass
+                    stringBuilder.append(whereAsString);
+                });
+            }
+
+            if (requestOrderBy.getOrderBy() != null && !requestOrderBy.getOrderBy().isEmpty()) {
+                sqlOrderByHelper = ((stringBuilder, alias, model) -> {
+                    String orderByAsString = requestOrderBy.getOrderBy(alias, requestOrderBy.getOrderBy());
+                    stringBuilder.append(orderByAsString);
+                });
+            }
+
+        }
+        return ResponseEntity
+                .status((Short) CommonStatus.OK[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.OK[0])
+                        .info((String)  CommonStatus.OK[1])
+                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper,sqlOrderByHelper,null,gadget))
+                        .build()
+                );
+    }
+
     @GetMapping(value = "/selectAllWhereAndOrderBy")
     private ResponseEntity<ResponseObject<List<Gadget>>> getAllWhereAndOrderBy(@RequestBody(required = false) RequestOrderBy<Gadget> requestOrderBy) {
         SqlWhereHelper<Gadget> sqlWhereHelper = null;

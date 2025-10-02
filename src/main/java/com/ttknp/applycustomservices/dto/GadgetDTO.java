@@ -45,6 +45,11 @@ public class GadgetDTO implements ModelService<Gadget> {
     }
 
     @Override
+    public List<Gadget> retrieveWhereAndOrderByAllModels(SqlWhereHelper<Gadget> sqlWhereHelper, SqlOrderByHelper<Gadget> sqlOrderByHelper, String alias, Gadget model) {
+        return jdbcSelectHelper.selectAll(Gadget.class , sqlOrderByHelper, sqlWhereHelper,alias, model);
+    }
+
+    @Override
     public List<Gadget> retrieveOrderByAllModelsAndReplaceAssignValues(SqlOrderByHelper<Gadget> sqlOrderByHelper) {
         StringBuilder stringBuilderSql = jdbcSelectHelper.getStatement("select_star_gadget.sql");
         return jdbcSelectHelper.selectAll(Gadget.class,stringBuilderSql, sqlOrderByHelper);
