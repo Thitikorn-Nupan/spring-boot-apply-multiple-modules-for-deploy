@@ -26,18 +26,14 @@ public class GadgetDTO implements ModelService<Gadget> {
 
     private final JdbcSelectHelper<Gadget> jdbcSelectHelper;
     private final JdbcInsertUpdateDeleteHelper<Gadget> jdbcInsertUpdateDeleteHelper;
-
     // **
     private final JdbcReadSQLFileHelper jdbcReadSQLFileHelper;
-    private final JdbcTemplate jdbcTemplate;
 
     @Autowired
     public GadgetDTO(JdbcSelectHelper<Gadget> jdbcSelectHelper, JdbcInsertUpdateDeleteHelper<Gadget> jdbcInsertUpdateDeleteHelper, JdbcReadSQLFileHelper jdbcReadSQLFileHelper, JdbcTemplate jdbcTemplate) {
         this.jdbcSelectHelper = jdbcSelectHelper;
         this.jdbcInsertUpdateDeleteHelper = jdbcInsertUpdateDeleteHelper;
-        // **
-        this.jdbcTemplate = jdbcTemplate;
-        this.jdbcReadSQLFileHelper = new JdbcReadSQLFileHelper(this.jdbcTemplate);
+        this.jdbcReadSQLFileHelper = jdbcReadSQLFileHelper;
     }
 
     @Override
