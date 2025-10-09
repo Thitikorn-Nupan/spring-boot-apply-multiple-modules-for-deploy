@@ -13,11 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 // @RestController
 // @RequestMapping(value = "/api/gadget")
-@CommonRestAPI(configPath = "/api/gadget",configOrigins = "http://localhost:4200")
+@CommonRestAPI(configPath = "/api/gadget", configOrigins = "http://localhost:4200")
 public class GadgetController {
 
     private static final Logger log = LoggerFactory.getLogger(GadgetController.class);
@@ -34,7 +35,7 @@ public class GadgetController {
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
+                        .info((String) CommonStatus.OK[1])
                         .data(modelService.retrieveAllModels())
                         .build()
                 );
@@ -65,8 +66,8 @@ public class GadgetController {
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
-                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper,sqlOrderByHelper,null,gadget))
+                        .info((String) CommonStatus.OK[1])
+                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper, sqlOrderByHelper, null, gadget))
                         .build()
                 );
     }
@@ -96,8 +97,8 @@ public class GadgetController {
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
-                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper,sqlOrderByHelper,gadget))
+                        .info((String) CommonStatus.OK[1])
+                        .data(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper, sqlOrderByHelper, gadget))
                         .build()
                 );
     }
@@ -124,19 +125,17 @@ public class GadgetController {
                     stringBuilder.append(orderByAsString);
                     // 4. select * from gadget as alias order by  alias.price asc, alias.brand desc, alias.gid asc limit 20
                 });
-            }
-            else { // Optional else
+            } else { // Optional else
                 log.debug("orderBy & requestOrderBy are null");
             }
-        }
-        else {  // On postman set body to none for no request body
+        } else {  // On postman set body to none for no request body
             log.debug("requestOrderBy is null");
         }
         return ResponseEntity
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
+                        .info((String) CommonStatus.OK[1])
                         .data(modelService.retrieveOrderByAllModels(sqlOrderByHelper))
                         .build()
                 );
@@ -157,7 +156,7 @@ public class GadgetController {
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
+                        .info((String) CommonStatus.OK[1])
                         .data(modelService.retrieveOrderByAllModelsAndReplaceAssignValues(sqlOrderByHelper))
                         .build()
                 );
@@ -170,7 +169,7 @@ public class GadgetController {
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.OK[0])
-                        .info((String)  CommonStatus.OK[1])
+                        .info((String) CommonStatus.OK[1])
                         .data(modelService.retrieveModel(gid))
                         .build()
                 );
@@ -182,7 +181,7 @@ public class GadgetController {
                 .status((Short) CommonStatus.CREATE[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.CREATE[0])
-                        .info((String)  CommonStatus.CREATE[1])
+                        .info((String) CommonStatus.CREATE[1])
                         .data(modelService.createModel(gadget))
                         .build()
                 );
@@ -194,7 +193,7 @@ public class GadgetController {
                 .status((Short) CommonStatus.ACCEPTED[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.ACCEPTED[0])
-                        .info((String)  CommonStatus.ACCEPTED[1])
+                        .info((String) CommonStatus.ACCEPTED[1])
                         .data(modelService.updateModel(gadget))
                         .build()
                 );
@@ -206,8 +205,37 @@ public class GadgetController {
                 .status((Short) CommonStatus.ACCEPTED[0])
                 .body(ResponseObject.builder()
                         .status((Short) CommonStatus.ACCEPTED[0])
-                        .info((String)  CommonStatus.ACCEPTED[1])
+                        .info((String) CommonStatus.ACCEPTED[1])
                         .data(modelService.deleteModel(gid))
+                        .build()
+                );
+    }
+
+
+    @GetMapping(value = "/readStatement/{con}")
+    public ResponseEntity<ResponseObject<Boolean>> readStatement(@PathVariable String con) {
+        switch (con) {
+            case "truncateTableByAbsPath":
+                modelService.loadSqlStatementByAbsPath();
+                break;
+            case "truncateTableByRootPath":
+                modelService.loadSqlStatementByRootPath();
+                break;
+            case "insertSelectWherePkByAbsPath":
+                modelService.loadSqlStatementAndBindParamsByAbsPath();
+                break;
+            case"insertSelectWherePkByRootPath":
+                modelService.loadSqlStatementAndBindParamsByRootPath();
+                break;
+            default:
+                break;
+        }
+        return ResponseEntity
+                .status((Short) CommonStatus.ACCEPTED[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.ACCEPTED[0])
+                        .info((String) CommonStatus.ACCEPTED[1])
+                        .data(true)
                         .build()
                 );
     }

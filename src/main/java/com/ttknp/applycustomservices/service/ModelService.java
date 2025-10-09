@@ -16,4 +16,9 @@ public interface ModelService<T> {
     Boolean createModel(T model);
     Boolean updateModel(T model);
     <U> Boolean deleteModel(U key);
+    // **
+    void loadSqlStatementByAbsPath();
+    void loadSqlStatementByRootPath();
+    void loadSqlStatementAndBindParamsByAbsPath();
+    void loadSqlStatementAndBindParamsByRootPath();
 }
