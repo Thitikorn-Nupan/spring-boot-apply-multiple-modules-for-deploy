@@ -16,9 +16,12 @@ public interface ModelService<T> {
     Boolean createModel(T model);
     Boolean updateModel(T model);
     <U> Boolean deleteModel(U key);
-    // **
+    // ** For test read sql as statement then query
     void loadSqlStatementByAbsPath();
     void loadSqlStatementByRootPath();
     void loadSqlStatementAndBindParamsByAbsPath();
     void loadSqlStatementAndBindParamsByRootPath();
+    List<T> loadSqlStatementAndRetrieveAllModels();
+    <U> List<T> loadSqlStatementAndRetrieveModel(U key);
+    List<T> loadSqlStatementAndRetrieveModel(Float price1,Float price2,String brand);
 }

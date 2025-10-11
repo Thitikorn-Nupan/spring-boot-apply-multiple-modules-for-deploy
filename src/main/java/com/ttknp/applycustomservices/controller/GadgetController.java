@@ -13,11 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
-// @RestController
-// @RequestMapping(value = "/api/gadget")
+// Note, configOrigins you can test on postman on header
 @CommonRestAPI(configPath = "/api/gadget", configOrigins = "http://localhost:4200")
 public class GadgetController {
 
@@ -29,8 +27,46 @@ public class GadgetController {
         this.modelService = modelService;
     }
 
+
+    @GetMapping(value = "/loadStatementAndSelectAll")
+    private ResponseEntity<ResponseObject<List<Gadget>>> loadStatementAndSelectAll() {
+        return ResponseEntity
+                .status((Short) CommonStatus.OK[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.OK[0])
+                        .info((String) CommonStatus.OK[1])
+                        .data(modelService.loadSqlStatementAndRetrieveAllModels())
+                        .build()
+                );
+    }
+
+    @GetMapping(value = "/loadSqlStatementAndRetrieveModel")
+    private ResponseEntity<ResponseObject<List<Gadget>>> loadSqlStatementAndRetrieveModel(@RequestParam String gid) {
+        return ResponseEntity
+                .status((Short) CommonStatus.OK[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.OK[0])
+                        .info((String) CommonStatus.OK[1])
+                        .data(modelService.loadSqlStatementAndRetrieveModel(gid))
+                        .build()
+                );
+    }
+
+    @GetMapping(value = "/loadSqlStatementAndRetrieveModels")
+    private ResponseEntity<ResponseObject<List<Gadget>>> loadSqlStatementAndRetrieveModel(@RequestParam Float price1,@RequestParam Float price2,@RequestParam String brand) {
+        return ResponseEntity
+                .status((Short) CommonStatus.OK[0])
+                .body(ResponseObject.builder()
+                        .status((Short) CommonStatus.OK[0])
+                        .info((String) CommonStatus.OK[1])
+                        .data(modelService.loadSqlStatementAndRetrieveModel(price1,price2,brand))
+                        .build()
+                );
+    }
+
+
     @GetMapping(value = "/selectAll")
-    public ResponseEntity<ResponseObject<List<Gadget>>> retrieveAllModels() {
+    private ResponseEntity<ResponseObject<List<Gadget>>> retrieveAllModels() {
         return ResponseEntity
                 .status((Short) CommonStatus.OK[0])
                 .body(ResponseObject.builder()

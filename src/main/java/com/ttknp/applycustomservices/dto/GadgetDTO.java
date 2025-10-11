@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
-
 import java.util.HashMap;
 import java.util.List;
 
@@ -21,12 +20,10 @@ import java.util.List;
 @Service
 public class GadgetDTO implements ModelService<Gadget> {
 
-    public static String SQL_SCRIPT_DIR_ON_ROOT = "/sql/";
+    public static String SQL_SCRIPT_DIR_ON_ROOT = "/sql";
     public static String SQL_SCRIPT_DIR_ON_ABS = "B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/";
-
     private final JdbcSelectHelper<Gadget> jdbcSelectHelper;
     private final JdbcInsertUpdateDeleteHelper<Gadget> jdbcInsertUpdateDeleteHelper;
-    // **
     private final JdbcReadSQLFileHelper jdbcReadSQLFileHelper;
 
     @Autowired
@@ -62,6 +59,7 @@ public class GadgetDTO implements ModelService<Gadget> {
 
     @Override
     public List<Gadget> retrieveOrderByAllModelsAndReplaceAssignValues(SqlOrderByHelper<Gadget> sqlOrderByHelper) {
+        // Note! getStatement() start on resources/sql dir because i set Resource resource = this.resourceLoader.getResource("classpath:sql/" + fileName);
         StringBuilder stringBuilderSql = jdbcSelectHelper.getStatement("select_star_gadget.sql");
         return jdbcSelectHelper.selectAll(Gadget.class, stringBuilderSql, sqlOrderByHelper);
     }
@@ -110,8 +108,8 @@ public class GadgetDTO implements ModelService<Gadget> {
 
     @Override
     public void loadSqlStatementByRootPath() {
-        // loadScriptRootPath start searching on resource dir ex, resource/sql/truncate_gadget_bak
-        this.jdbcReadSQLFileHelper.loadScriptRootPath(SQL_SCRIPT_DIR_ON_ROOT+"truncate_gadget_bak.sql");
+        // loadScriptRootPath start on resource dir ex, resource/...
+        this.jdbcReadSQLFileHelper.loadScriptRootPath("sql/truncate_gadget_bak.sql");
     }
 
     @Override
@@ -119,8 +117,8 @@ public class GadgetDTO implements ModelService<Gadget> {
         HashMap<String,String> params = new HashMap<>();
         params.put("[AMOUNT]","1000");
         params.put("{GID}","'G001'");
-        this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_ABS);
         try {
+            this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_ABS);
             this.jdbcReadSQLFileHelper.loadScriptAbsPath("insert_select_gadget_bak.sql",params);
         } catch (Exception e) {
             throw new ContentNotAllowed(e);
@@ -138,5 +136,39 @@ public class GadgetDTO implements ModelService<Gadget> {
         } catch (Exception e) {
             throw new ContentNotAllowed(e);
         }
+    }
+
+    @Override
+    public List<Gadget> loadSqlStatementAndRetrieveAllModels() {
+        // On Root Path
+        // return this.jdbcSelectHelper.readStatementAndSelectAll(Gadget.class,ApplyCustomServicesApplication.class,"sql/select_star_gadget_bak.sql");
+        // On Absolute Path
+        return this.jdbcSelectHelper.readStatementAndSelectAll(Gadget.class,"B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/select_star_gadget_bak.sql");
+    }
+
+    @Override
+    public <U> List<Gadget> loadSqlStatementAndRetrieveModel(U key) {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("{GID}","'"+key+"'");
+        // On Absolute Path
+        // return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,"B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/select_star_gadget_where.sql", params);
+        // On Root Path
+        return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,ApplyCustomServicesApplication.class,"sql/select_star_gadget_where.sql", params);
+    }
+
+    @Override
+    public List<Gadget> loadSqlStatementAndRetrieveModel(Float price1, Float price2, String brand) {
+        HashMap<String,String> params = new HashMap<>();
+        params.put("{PRICE_1}",price1.toString());
+        params.put("{PRICE_2}",price2.toString());
+        if (!brand.isEmpty()) {
+            params.put("[BRAND]","'"+brand+"'");
+        } else {
+            params.put("[BRAND]","null");
+        }
+        // On Root Path
+        // return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,ApplyCustomServicesApplication.class,"sql/select_star_gadget_where_and.sql", params);
+        // On Absolute Path
+        return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,"B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/select_star_gadget_where_and.sql", params);
     }
 }
