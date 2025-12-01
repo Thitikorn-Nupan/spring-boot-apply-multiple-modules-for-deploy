@@ -1,1 +1,1 @@
-SELECT * FROM GADGET AS G WHERE G.GID = {GID};
+select * from gadget as g where g.gid = {GID};

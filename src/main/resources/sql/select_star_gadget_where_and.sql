@@ -1,1 +1,1 @@
-SELECT * FROM GADGET AS G WHERE G.PRICE > {PRICE_1} AND G.PRICE < {PRICE_2} AND G.BRAND = [BRAND];
+select * from gadget as g where g.price > {PRICE_1} and g.price < {PRICE_2} and g.brand = [BRAND];

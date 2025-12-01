@@ -1,3 +1,3 @@
-SET FOREIGN_KEY_CHECKS = 0;
-TRUNCATE table GADGET_BAK;
-SET FOREIGN_KEY_CHECKS = 1;
+set foreign_key_checks = 0;
+truncate table gadget_bak;
+set foreign_key_checks = 1;

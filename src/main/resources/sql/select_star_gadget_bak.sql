@@ -1,1 +1,1 @@
-SELECT * FROM GADGET_BAK;
+select * from gadget_bak;

@@ -1,3 +1,3 @@
-INSERT INTO GADGET_BAK ( GID , MODEL ,  BRAND ,  PRICE ,  AMOUNT)
-    SELECT  GID , MODEL ,  BRAND ,  PRICE ,  [AMOUNT]
-        FROM GADGET WHERE GID = {GID};
+insert into gadget_bak ( gid , model ,  brand ,  price ,  amount)
+    select  gid , model ,  brand ,  price ,  [AMOUNT]
+        from gadget where gid = {GID};

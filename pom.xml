@@ -82,6 +82,9 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <!--<configuration>
+                    <jvmArguments>-Xmx512m -Dlogging.level.org.springframework=DEBUG</jvmArguments>
+                </configuration>-->
             </plugin>
 
             <!-- **** importance for build jar with multiple modules -->
@@ -134,6 +137,22 @@
                             <version>0.0.1-SNAPSHOT</version>
                             <packaging>jar</packaging>
                             <file>${basedir}/libs/web-custom-service-0.0.1-SNAPSHOT.jar</file>
+                        </configuration>
+                    </execution>
+
+                    <!-- in this module doesn't call but jdbc-custom-service use so it have to import -->
+                    <execution>
+                        <id>valiadation-custom-service</id>
+                        <phase>initialize</phase>
+                        <goals>
+                            <goal>install-file</goal>
+                        </goals>
+                        <configuration>
+                            <groupId>com.ttknp</groupId>
+                            <artifactId>valiadation-custom-service</artifactId>
+                            <version>0.0.1-SNAPSHOT</version>
+                            <packaging>jar</packaging>
+                            <file>${basedir}/libs/valiadation-custom-service-0.0.1-SNAPSHOT.jar</file>
                         </configuration>
                     </execution>
 

@@ -21,6 +21,7 @@ import java.util.List;
 public class GadgetDTO implements ModelService<Gadget> {
 
     public static String SQL_SCRIPT_DIR_ON_ROOT = "/sql";
+    // public static String SQL_SCRIPT_DIR_ON_SERVER = "/root/apps/spring-boot/apps/basic-api-apply-custom-service/sql/";
     public static String SQL_SCRIPT_DIR_ON_ABS = "B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/";
     private final JdbcSelectHelper<Gadget> jdbcSelectHelper;
     private final JdbcInsertUpdateDeleteHelper<Gadget> jdbcInsertUpdateDeleteHelper;
@@ -102,6 +103,7 @@ public class GadgetDTO implements ModelService<Gadget> {
 
     @Override
     public void loadSqlStatementByAbsPath() {
+        // this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_SERVER);
         this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_ABS);
         this.jdbcReadSQLFileHelper.loadScriptAbsPath("truncate_gadget_bak.sql");
     }
@@ -118,6 +120,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         params.put("[AMOUNT]","1000");
         params.put("{GID}","'G001'");
         try {
+            // this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_SERVER);
             this.jdbcReadSQLFileHelper.setSqlScriptDir(SQL_SCRIPT_DIR_ON_ABS);
             this.jdbcReadSQLFileHelper.loadScriptAbsPath("insert_select_gadget_bak.sql",params);
         } catch (Exception e) {
@@ -143,6 +146,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         // On Root Path
         // return this.jdbcSelectHelper.readStatementAndSelectAll(Gadget.class,ApplyCustomServicesApplication.class,"sql/select_star_gadget_bak.sql");
         // On Absolute Path
+        // return this.jdbcSelectHelper.readStatementAndSelectAll(Gadget.class,"/root/apps/spring-boot/apps/basic-api-apply-custom-service/sql/select_star_gadget_bak.sql");
         return this.jdbcSelectHelper.readStatementAndSelectAll(Gadget.class,"B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/select_star_gadget_bak.sql");
     }
 
@@ -169,6 +173,7 @@ public class GadgetDTO implements ModelService<Gadget> {
         // On Root Path
         // return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,ApplyCustomServicesApplication.class,"sql/select_star_gadget_where_and.sql", params);
         // On Absolute Path
+        // return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,"/root/apps/spring-boot/apps/basic-api-apply-custom-service/sql/select_star_gadget_where_and.sql", params);
         return this.jdbcSelectHelper.readStatementAndReplaceParamsAndSelectAll(Gadget.class,"B:/practice-java-one-jetbrains/spring-boot-skills/lab_core_40/apply-custom-services/src/main/resources/sql/select_star_gadget_where_and.sql", params);
     }
 }
