@@ -15,16 +15,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+// No security
+// Note, configOrigins you can test on postman on header
+@CommonRestAPI(configPath = "/api.v2/gadget", configOrigins = "http://localhost:4200")
+public class GadgetV2Controller {
 
-// By default /api/** it's security
-@CommonRestAPI(configPath = "/api/gadget", configOrigins = "http://localhost:4200")
-public class GadgetController {
-
-    private static final Logger log = LoggerFactory.getLogger(GadgetController.class);
+    private static final Logger log = LoggerFactory.getLogger(GadgetV2Controller.class);
     private final ModelService<Gadget> modelService;
 
     @Autowired
-    public GadgetController(ModelService<Gadget> modelService) {
+    public GadgetV2Controller(ModelService<Gadget> modelService) {
         this.modelService = modelService;
     }
 
@@ -276,6 +276,5 @@ public class GadgetController {
                         .build()
                 );
     }
-
 
 }

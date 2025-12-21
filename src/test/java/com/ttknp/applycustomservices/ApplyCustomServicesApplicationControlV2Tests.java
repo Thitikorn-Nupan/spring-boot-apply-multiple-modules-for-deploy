@@ -1,7 +1,7 @@
 package com.ttknp.applycustomservices;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ttknp.applycustomservices.controller.GadgetController;
+import com.ttknp.applycustomservices.controller.GadgetV2Controller;
 import com.ttknp.applycustomservices.entity.Gadget;
 import com.ttknp.applycustomservices.service.ModelService;
 import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlOrderByHelper;
@@ -33,9 +33,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  You have to comment @ComponentScan(basePackages = {"com.ttknp"}) on your main class for testing mode
 */
 // *** JUnit5 test cases for CRUD REST APIs. use the @WebMvcTest annotation to load only UserController class. (can multiple rest controller)
-@WebMvcTest(GadgetController.class)
-class ApplyCustomServicesApplicationControlTests {
-    private static final Logger log = LoggerFactory.getLogger(ApplyCustomServicesApplicationControlTests.class);
+@WebMvcTest(GadgetV2Controller.class)
+class ApplyCustomServicesApplicationControlV2Tests {
+    private static final Logger log = LoggerFactory.getLogger(ApplyCustomServicesApplicationControlV2Tests.class);
     // *** using MockMvc class to make REST API calls.
     @Autowired
     private MockMvc mockMvc;
@@ -51,7 +51,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.retrieveAllModels()).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/selectAll"); // Note i have to cut /api because this prefix work after module running
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/selectAll"); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ///  ** result follow your api response
@@ -74,7 +74,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper, sqlOrderByHelper, null, gadget)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/selectAllWhereAndOrderByCustomAlias")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/selectAllWhereAndOrderByCustomAlias")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -99,7 +99,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.retrieveWhereAndOrderByAllModels(sqlWhereHelper, sqlOrderByHelper, gadget)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/selectAllWhereAndOrderBy")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/selectAllWhereAndOrderBy")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -121,7 +121,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.retrieveOrderByAllModels( sqlOrderByHelper)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/selectAllOrderBy")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/selectAllOrderBy")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -143,7 +143,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.retrieveOrderByAllModelsAndReplaceAssignValues( sqlOrderByHelper)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/selectAllOrderByAndReplaceAssignValues")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/selectAllOrderByAndReplaceAssignValues")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -160,7 +160,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.loadSqlStatementAndRetrieveAllModels()).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/loadStatementAndSelectAll"); // Note i have to cut /api because this prefix work after module running
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/loadStatementAndSelectAll"); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ///  ** result follow your api response
@@ -176,7 +176,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.loadSqlStatementAndRetrieveModel(gid)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/loadSqlStatementAndRetrieveModel").param("gid","G002"); // Note i have to cut /api because this prefix work after module running
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/loadSqlStatementAndRetrieveModel").param("gid","G002"); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ///  ** result follow your api response
@@ -199,7 +199,7 @@ class ApplyCustomServicesApplicationControlTests {
         given(modelService.loadSqlStatementAndRetrieveModel(price1,price2,brand)).willReturn(getGadgets());
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/loadSqlStatementAndRetrieveModels")
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/loadSqlStatementAndRetrieveModels")
                 .params(params);// Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
@@ -220,7 +220,7 @@ class ApplyCustomServicesApplicationControlTests {
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
         RequestBuilder request = MockMvcRequestBuilders
-                .get("/api/gadget/selectOne/{gid}", id);
+                .get("/api.v2/gadget/selectOne/{gid}", id);
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ///  ** result follow your api response
@@ -242,7 +242,7 @@ class ApplyCustomServicesApplicationControlTests {
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
         RequestBuilder request = MockMvcRequestBuilders
-                .post("/api/gadget/insertOne")
+                .post("/api.v2/gadget/insertOne")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -266,7 +266,7 @@ class ApplyCustomServicesApplicationControlTests {
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
         RequestBuilder request = MockMvcRequestBuilders
-                .put("/api/gadget/updateOne")
+                .put("/api.v2/gadget/updateOne")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody); // Note i have to cut /api because this prefix work after module running
         // ** ResultActions class to handle the response of the REST API.
@@ -285,7 +285,7 @@ class ApplyCustomServicesApplicationControlTests {
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
         RequestBuilder request = MockMvcRequestBuilders
-                .delete("/api/gadget/deleteOne/{gid}", gid);
+                .delete("/api.v2/gadget/deleteOne/{gid}", gid);
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ///  ** result follow your api response
@@ -307,10 +307,10 @@ class ApplyCustomServicesApplicationControlTests {
         willDoNothing().given(modelService).loadSqlStatementAndBindParamsByRootPath();
         /// ** call the provider **
         // when -  action or the behaviour(n.พฤติกรรม) that we are going test
-        RequestBuilder request = MockMvcRequestBuilders.get("/api/gadget/readStatement/{con}", con);
-        RequestBuilder request1 = MockMvcRequestBuilders.get("/api/gadget/readStatement/{con}", con1);
-        RequestBuilder request2 = MockMvcRequestBuilders.get("/api/gadget/readStatement/{con}", con2);
-        RequestBuilder request3 = MockMvcRequestBuilders.get("/api/gadget/readStatement/{con}", con3);
+        RequestBuilder request = MockMvcRequestBuilders.get("/api.v2/gadget/readStatement/{con}", con);
+        RequestBuilder request1 = MockMvcRequestBuilders.get("/api.v2/gadget/readStatement/{con}", con1);
+        RequestBuilder request2 = MockMvcRequestBuilders.get("/api.v2/gadget/readStatement/{con}", con2);
+        RequestBuilder request3 = MockMvcRequestBuilders.get("/api.v2/gadget/readStatement/{con}", con3);
         // ** ResultActions class to handle the response of the REST API.
         ResultActions response = mockMvc.perform(request);
         ResultActions response1 = mockMvc.perform(request1);
