@@ -60,6 +60,9 @@ public class LoginController {
         List<LoginModel> models = new ArrayList<>();
         LoginModel loginModel = new LoginModel();
         LoginModel loginModel2 = new LoginModel();
+        LoginModel loginModel3 = new LoginModel();
+        LoginModel loginModel4 = new LoginModel();
+
         loginModel.setUsername("test");
         loginModel.setEmail("test@hotmail.com");
         loginModel.setRole("ROLE_ADMIN"); // ** required work for hasRole(...) need a prefix as ROLE_*
@@ -72,8 +75,22 @@ public class LoginController {
         loginModel2.setCreateBy("ADMIN");
         loginModel2.setPassword(UsefulAuthHelper.convertStringToBCryptString("1"));
 
+        loginModel3.setUsername("test3");
+        loginModel3.setEmail("test3@hotmail.com");
+        loginModel3.setRole("admin"); // ** required work for hasAuthority(...)
+        loginModel3.setCreateBy("ADMIN");
+        loginModel3.setPassword(UsefulAuthHelper.convertStringToBCryptString("1"));
+
+        loginModel4.setUsername("test4");
+        loginModel4.setEmail("test4@hotmail.com");
+        loginModel4.setRole("user"); // ** required work for hasAuthority(...)
+        loginModel4.setCreateBy("ADMIN");
+        loginModel4.setPassword(UsefulAuthHelper.convertStringToBCryptString("1"));
+
         models.add(loginModel);
         models.add(loginModel2);
+        models.add(loginModel3);
+        models.add(loginModel4);
         return models;
     }
 
