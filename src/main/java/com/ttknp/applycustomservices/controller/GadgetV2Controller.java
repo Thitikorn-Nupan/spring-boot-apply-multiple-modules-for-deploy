@@ -15,7 +15,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-// No security
+// Follow SecurityConfigCustom bean !!!
+// Only api.v2/gadget/selectAllOrderBy is No security and ** Another paths for admin !!
 // Note, configOrigins you can test on postman on header
 @CommonRestAPI(configPath = "/api.v2/gadget", configOrigins = "http://localhost:4200")
 public class GadgetV2Controller {

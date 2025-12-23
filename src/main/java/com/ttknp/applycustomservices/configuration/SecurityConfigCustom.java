@@ -28,7 +28,7 @@ public class SecurityConfigCustom {
     }
 
     @Bean
-    @Order(2) // Work as setup another module
+    @Order(2) 
     public SecurityFilterChain filterChainCustom(HttpSecurity httpSecurity) throws Exception {
         log.info("Configuring filterChainCustom");
         // Test work after run auth micro
@@ -42,8 +42,9 @@ public class SecurityConfigCustom {
         httpSecurity.securityMatcher("/api.v2/**") // This chain only matches /server/**
                 .authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) -> {
                     authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.GET,"/api.v2/gadget/selectAllOrderBy").permitAll();
+                    authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.GET,"/api.v2/gadget/loadStatementAndSelectAll").hasAuthority("admin");
                     // Note , hasAuthority(...) will looking to string without prefix!!
-                    authorizationManagerRequestMatcherRegistry.anyRequest().hasAuthority("admin");
+                    authorizationManagerRequestMatcherRegistry.anyRequest().hasAuthority("admin"); // Not working ?
                 }).httpBasic();
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(this.jwtRequestFilter, BasicAuthenticationFilter.class);
