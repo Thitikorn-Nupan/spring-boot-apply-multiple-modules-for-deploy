@@ -43,6 +43,7 @@ public class SecurityConfigCustom {
                 .authorizeHttpRequests((authorizationManagerRequestMatcherRegistry) -> {
                     authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.GET,"/api.v2/gadget/selectAllOrderBy").permitAll();
                     authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.GET,"/api.v2/gadget/loadStatementAndSelectAll").hasAuthority("admin");
+                    authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.GET,"/api.v2/gadget/selectAll").hasAuthority("admin");
                     // Note , hasAuthority(...) will looking to string without prefix!!
                     authorizationManagerRequestMatcherRegistry.anyRequest().hasAuthority("admin"); // Not working ?
                 }).httpBasic();
