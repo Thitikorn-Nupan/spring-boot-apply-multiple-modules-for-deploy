@@ -5,14 +5,19 @@ import com.ttknp.applycustomservices.service.ModelService;
 import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlOrderByHelper;
 import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.SqlWhereHelper;
 import com.ttknp.jdbccustomservice.jdbc.sql_order_by_and_where.entity.RequestOrderBy;
+import com.ttknp.managefile.dto.FileDTO;
 import com.ttknp.responsecustomservice.constant.CommonStatus;
 import com.ttknp.responsecustomservice.entity.ResponseObject;
 import com.ttknp.webcustomservice.annotation.CommonRestAPI;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 // Follow SecurityConfigCustom bean !!!
@@ -23,10 +28,13 @@ public class GadgetV2Controller {
 
     private static final Logger log = LoggerFactory.getLogger(GadgetV2Controller.class);
     private final ModelService<Gadget> modelService;
-
+    private final FileDTO fileDTO;
     @Autowired
     public GadgetV2Controller(ModelService<Gadget> modelService) {
         this.modelService = modelService;
+        this.fileDTO = new FileDTO();
+        fileDTO.setPathToWork("B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files");
+
     }
 
 
@@ -276,6 +284,53 @@ public class GadgetV2Controller {
                         .data(true)
                         .build()
                 );
+    }
+
+
+    @PostMapping(value = "/upload")
+    private void upload(@RequestParam("file") MultipartFile multipartFile)  {
+        fileDTO.uploadFileToTarget(multipartFile);
+    }
+
+    @PostMapping(value = "/uploadNoReplace")
+    private void uploadNoReplace(@RequestParam("file") MultipartFile multipartFile)  {
+        fileDTO.uploadFileToTargetNoReplace(multipartFile);
+    }
+
+    @PostMapping(value = "/renameFile")
+    private void renameFile(@RequestParam String oldFilename, @RequestParam String newFilename)  {
+        fileDTO.renameFileFromTarget(oldFilename, newFilename);
+    }
+
+    @PostMapping(value = "/renameAllFiles")
+    private void renameAllFiles()  {
+        fileDTO.renameAllFilesFromTarget();
+    }
+
+    @DeleteMapping(value = "/delete")
+    private void delete(@RequestParam String filename)  {
+        fileDTO.deleteFileFromTarget(filename);
+    }
+
+    @DeleteMapping(value = "/deleteAll")
+    private void deleteAll()  {
+        fileDTO.setPathToWork("B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files_remove");
+        fileDTO.deleteAllFilesFromTarget();
+    }
+
+    @GetMapping(value = "/readFile")
+    private ResponseEntity<String> read(@RequestParam String filename)  {
+        return ResponseEntity.ok(fileDTO.readFileFromTarget(filename));
+    }
+
+    @GetMapping(value = "/downloadFile")
+    private ResponseEntity<Resource> downloadFile(@RequestParam String filename)  {
+        Resource resource = fileDTO.downloadFileToTarget(filename);
+        return ResponseEntity
+                .ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"") // very importance
+                .body(resource);
     }
 
 }
