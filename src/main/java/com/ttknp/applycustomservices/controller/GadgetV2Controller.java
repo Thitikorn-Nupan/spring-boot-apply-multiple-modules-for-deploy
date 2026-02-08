@@ -29,12 +29,15 @@ public class GadgetV2Controller {
     private static final Logger log = LoggerFactory.getLogger(GadgetV2Controller.class);
     private final ModelService<Gadget> modelService;
     private final FileDTO fileDTO;
+
+    public static String FILE_DIR_ON_SERVER = "/root/apps/spring-boot/apps/basic-api-apply-custom-service/files";
+    public static String FILE_DIR_ON_ABS = "B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files";
+
     @Autowired
     public GadgetV2Controller(ModelService<Gadget> modelService) {
         this.modelService = modelService;
         this.fileDTO = new FileDTO();
-        fileDTO.setPathToWork("B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files");
-
+        fileDTO.setPathToWork(FILE_DIR_ON_SERVER);
     }
 
 
@@ -314,7 +317,8 @@ public class GadgetV2Controller {
 
     @DeleteMapping(value = "/deleteAll")
     private void deleteAll()  {
-        fileDTO.setPathToWork("B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files_remove");
+        // fileDTO.setPathToWork(pathToWorks[0]);
+        // fileDTO.setPathToWork(FILE_DIR_ON_SERVER);
         fileDTO.deleteAllFilesFromTarget();
     }
 

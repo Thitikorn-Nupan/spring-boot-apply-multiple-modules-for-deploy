@@ -15,14 +15,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.List;
-
 
 // By default /api/** it's security
 @CommonRestAPI(configPath = "/api", configOrigins = "http://localhost:4200")
@@ -31,13 +29,13 @@ public class LoginController {
 
     private static final Logger log = LoggerFactory.getLogger(LoginController.class);
     private final JwtService jwtService;
-    private final ResourceLoader resourceLoader;
+    private final ResourceLoader resourceLoader = null;
     private final Environment environment;
 
     @Autowired
-    public LoginController( JwtService jwtService , ResourceLoader resourceLoader, Environment environment) {
+    public LoginController( JwtService jwtService ,  Environment environment) { // ResourceLoader resourceLoader,
         this.jwtService = jwtService;
-        this.resourceLoader = resourceLoader;
+        // this.resourceLoader = resourceLoader;
         this.environment = environment;
     }
 
@@ -52,9 +50,12 @@ public class LoginController {
         PrivateKey privateKey;
         // Load the private key from the resources folder on application start
         // ****
-        Resource resource = resourceLoader.getResource("classpath:ssl/private2048.pem");
+        // Resource not working on deployment (linux server)
+        // Resource resource = resourceLoader.getResource("classpath:ssl/private2048.pem");
+        // Resource resource = resourceLoader.getResource("/root/apps/spring-boot/apps/basic-api-apply-custom-service/ssl/private2048.pem");
+        String privateKeyString = UsefulAuthHelper.readFileFromTarget("/root/apps/spring-boot/apps/basic-api-apply-custom-service/ssl/private2048.pem");
         try {
-            privateKey = UsefulAuthHelper.getPrivateKey(resource.getFile());
+            privateKey = UsefulAuthHelper.getPrivateKey(privateKeyString);
         } catch (Exception e) {
             log.debug("could not load private key");
             throw new RuntimeException(e);
