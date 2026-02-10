@@ -31,12 +31,17 @@ public class LoginController {
     private final JwtService jwtService;
     private final ResourceLoader resourceLoader = null;
     private final Environment environment;
+    private final String[] sslKeys = {
+            "B:\\ssl_keys\\apply-custom-services\\ssl",
+            "/root/ssl_keys/apply-custom-services/ssl",
+            "src/main/resources/ssl/public2048.pem"
+    };
 
     @Autowired
-    public LoginController( JwtService jwtService ,  Environment environment) { // ResourceLoader resourceLoader,
+    public LoginController(JwtService jwtService ,  Environment environment) { // ResourceLoader resourceLoader,
         this.jwtService = jwtService;
-        // this.resourceLoader = resourceLoader;
         this.environment = environment;
+        // this.resourceLoader = resourceLoader;
     }
 
     @PostConstruct
@@ -53,7 +58,7 @@ public class LoginController {
         // Resource not working on deployment (linux server)
         // Resource resource = resourceLoader.getResource("classpath:ssl/private2048.pem");
         // Resource resource = resourceLoader.getResource("/root/apps/spring-boot/apps/basic-api-apply-custom-service/ssl/private2048.pem");
-        String privateKeyString = UsefulAuthHelper.readFileFromTarget("/root/apps/spring-boot/apps/basic-api-apply-custom-service/ssl/private2048.pem");
+        String privateKeyString = UsefulAuthHelper.readFileFromTarget(sslKeys[0]+"/private2048.pem");
         try {
             privateKey = UsefulAuthHelper.getPrivateKey(privateKeyString);
         } catch (Exception e) {

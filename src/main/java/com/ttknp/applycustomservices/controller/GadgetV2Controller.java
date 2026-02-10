@@ -31,15 +31,14 @@ public class GadgetV2Controller {
     private final FileDTO fileDTO;
 
     public static String FILE_DIR_ON_SERVER = "/root/apps/spring-boot/apps/basic-api-apply-custom-service/files";
-    public static String FILE_DIR_ON_ABS = "B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files";
+    public static String FILE_DIR_ON_LOCALHOST = "B:\\practice-java-one-jetbrains\\spring-boot-skills\\lab_core_40\\apply-custom-services\\files";
 
     @Autowired
     public GadgetV2Controller(ModelService<Gadget> modelService) {
         this.modelService = modelService;
         this.fileDTO = new FileDTO();
-        fileDTO.setPathToWork(FILE_DIR_ON_SERVER);
+        fileDTO.setPathToWork(FILE_DIR_ON_LOCALHOST);
     }
-
 
     @GetMapping(value = "/loadStatementAndSelectAll")
     private ResponseEntity<ResponseObject<List<Gadget>>> loadStatementAndSelectAll() {
@@ -295,6 +294,16 @@ public class GadgetV2Controller {
         fileDTO.uploadFileToTarget(multipartFile);
     }
 
+    @PostMapping(value = "/uploadImage")
+    private void uploadImage(@RequestParam("file") MultipartFile multipartFile)  {
+        fileDTO.uploadImageFileToTarget(multipartFile);
+    }
+
+    @PostMapping(value = "/uploadPDF")
+    private void uploadPDF(@RequestParam("file") MultipartFile multipartFile)  {
+        fileDTO.uploadPDFFileToTarget(multipartFile);
+    }
+
     @PostMapping(value = "/uploadNoReplace")
     private void uploadNoReplace(@RequestParam("file") MultipartFile multipartFile)  {
         fileDTO.uploadFileToTargetNoReplace(multipartFile);
@@ -317,8 +326,7 @@ public class GadgetV2Controller {
 
     @DeleteMapping(value = "/deleteAll")
     private void deleteAll()  {
-        // fileDTO.setPathToWork(pathToWorks[0]);
-        // fileDTO.setPathToWork(FILE_DIR_ON_SERVER);
+        // fileDTO.setPathToWork(pathToWorks[0]);// fileDTO.setPathToWork(FILE_DIR_ON_SERVER);
         fileDTO.deleteAllFilesFromTarget();
     }
 

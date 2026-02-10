@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-
 // By default /api/** it's security
 @CommonRestAPI(configPath = "/api/gadget", configOrigins = "http://localhost:4200")
 public class GadgetController {
